@@ -1,10 +1,12 @@
 //requirements
 const fs = require("fs")
 const inquirer = require("inquirer")
+//insert ASCII art here:
 
-//Command line prompts
+//inquirer prompts
 
 function menu(){
+
     inquirer.prompt(
         [
             {
@@ -61,16 +63,35 @@ function viewEmployees(){
     console.log('here are all the employees')
 }
 function addDepartment(){
-    console.log('adding a new department')
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'addingDepartment',
+            message: 'Enter the name of the new Department'
+        }
+    ]).then(anwers=>{
+        console.log(anwers)
+    })
 }
 function addRole(){
-    console.log('adding role')
+    inquirer.prompt([
+        {
+            
+        },
+        {
+
+        },
+
+    ]).then(anwers=>{
+        console.log(anwers)
+    })
 }
 function addEmployee(){
     console.log('adding employee')
 }
 function updateEmployeeRole(){
     console.log('this is a tricky one')
+    
 }
 function renderTable(){
     console.log('table')
