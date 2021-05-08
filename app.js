@@ -5,17 +5,17 @@ const db = require("./lib/query.js");
 const figlet = require("figlet");
 
 
-//insert ASCII art here:
-figlet("Employee Tracker",{
-    font: "Slant",
-},function(err, data){
-    if (err) {
-        console.log('Something went wrong...');
-        console.dir(err);
-        return;
-    }
-    console.log(data)
-}); 
+//ASCII text art:
+// figlet("Employee Tracker",{
+//     font: "Slant",
+// },function(err, data){
+//     if (err) {
+//         console.log('Something went wrong...');
+//         console.dir(err);
+//         return;
+//     }
+//     console.log(data)
+// }); 
 
 // inquirer prompts
 function menu() {  
