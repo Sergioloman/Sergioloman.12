@@ -80,7 +80,7 @@ function viewRoles() {
             console.log("\n");
             console.table(roles);
         }
-    )
+    ).then(() => menu())
 }
 function viewEmployees() {
     db.getAllEmployees().then(
@@ -89,7 +89,7 @@ function viewEmployees() {
             console.log("\n");
             console.table(employees);
         }
-    )
+    ).then(() => menu())
 }
 function addDepartment() {
     inquirer.prompt([
@@ -104,8 +104,8 @@ function addDepartment() {
             .then(
                 console.log(`added ${answers.name} to the database`)
             )
-            .then(() => menu())
-    })
+            
+    }).then(() => menu())
 }
 function addRole() {
     inquirer.prompt([
@@ -129,8 +129,8 @@ function addRole() {
             .then(
                 console.log(`added ${answers.title} to the database`)
             )
-            .then(()=>menu())
-    })
+            
+    }).then(() => menu())
 }
 function addEmployee() {
     inquirer.prompt([
@@ -160,8 +160,8 @@ function addEmployee() {
             .then(
                 console.log(`added ${answers.first_name} to the database`)
             )
-            .then(()=>menu())
-    })
+            
+    }).then(() => menu())
 }
 
 // how can we set inquirer to accomodate for relationships?
@@ -177,7 +177,7 @@ function updateEmployeeRole() {
     ]).then(answers=>{
         //update database
         console.log("update database with:", answers)
-    })
+    }).then(() => menu())
     
 }
 function done() {
