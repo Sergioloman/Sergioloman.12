@@ -4,8 +4,7 @@ const inquirer = require("inquirer");
 const db = require("./lib/query.js");
 const figlet = require("figlet");
 
-
-//ASCII text art:
+// ASCII text art:
 // figlet("Employee Tracker",{
 //     font: "Slant",
 // },function(err, data){
@@ -18,71 +17,81 @@ const figlet = require("figlet");
 // }); 
 
 // inquirer prompts
-function menu() {  
-  inquirer
-    .prompt([
-      {
-        type: "list",
-        name: "menu",
-        message: "Would would you like to do?",
-        choices: [
-          "View all departments",
-          "View all roles",
-          "View all employees",
-          "Add a department",
-          "Add a role",
-          "Add employee",
-          "Update employee role",
-        ],
-      },
-    ])
-    .then((menuAnswers) => {
-      console.log(menuAnswers);
-              switch (menuAnswers.menu){
-                  case 'View all departments':
-                      viewDepartments();
-                      break;
-                  case 'View all roles':
-                      viewRoles();
-                      break;
-                  case 'View all employees':
-                      viewEmployees();
-                      break;
-                  case 'Add a department':
-                      addDepartment();
-                      break;
-                  case 'Add a role':
-                      addRole();
-                      break;
-                  case 'Add employee':
-                      addEmployee();
-                      break;
-                  case 'Update employee role':
-                      updateEmployeeRole()
-                      break;
-                  default: renderTable()
-      }
-    });
+function menu() {
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                name: "menu",
+                message: "Would would you like to do?",
+                choices: [
+                    "View all departments",
+                    "View all roles",
+                    "View all employees",
+                    "Add a department",
+                    "Add a role",
+                    "Add employee",
+                    "Update employee role",
+                ],
+            },
+        ])
+        .then((menuAnswers) => {
+            console.log(menuAnswers);
+            switch (menuAnswers.menu) {
+                case 'View all departments':
+                    viewDepartments();
+                    break;
+                case 'View all roles':
+                    viewRoles();
+                    break;
+                case 'View all employees':
+                    viewEmployees();
+                    break;
+                case 'Add a department':
+                    addDepartment();
+                    break;
+                case 'Add a role':
+                    addRole();
+                    break;
+                case 'Add employee':
+                    addEmployee();
+                    break;
+                case 'Update employee role':
+                    updateEmployeeRole()
+                    break;
+                default: done()
+            }
+        });
 }
 
-
-
-function viewDepartments(){
-    db.getAlldepts().then(
-        ([rows])=>{
+function viewDepartments() {
+    db.getAllDepts().then(
+        ([rows]) => {
             let departments = rows;
             console.log("\n");//creates a new line
             console.table(departments);
         }
-    ).then(()=>menu())
+    ).then(() => menu())
 }
-function viewRoles(){
-    console.log('here are all the roles')
+function viewRoles() {
+    db.getAllRoles().then(
+        ([rows])=>{
+            let roles = rows;
+            console.log("\n");
+            console.table(roles);
+        }
+    )
 }
-function viewEmployees(){
-    console.log('here are all the employees')
+function viewEmployees() {
+    db.getAllEmployees().then(
+        ([rows])=>{
+            let employees = rows;
+            console.log("\n");
+            console.table(employees);
+        }
+    )
 }
-function addDepartment(){
+function addDepartment() {
     inquirer.prompt([
         {
             type: 'input',
@@ -90,26 +99,89 @@ function addDepartment(){
             //remember to match this value with what is under schema
             message: 'Enter the name of the new Department'
         }
-    ]).then(anwers=>{
+    ]).then(anwers => {
         db.addDept(anwers.name)
-        .then(
-            console.log(`added ${answers.name} to the database`)
-        )
-        .then(()=>menu())
+            .then(
+                console.log(`added ${answers.name} to the database`)
+            )
+            .then(() => menu())
     })
 }
-function addRole(){
-   console.log("hello")
+function addRole() {
+    inquirer.prompt([
+        {
+            type:'input',
+            name:'title',
+            message: 'Enter the new Role'
+        },
+        {
+            type:'input',
+            name:'salary',
+            message: 'Enter the salary for this Role'
+        },
+        {
+            type:'input',
+            name:'department_id',
+            message: 'What department does this role fit into?'
+        }
+    ]),then(answers =>{
+        db.addRole(answers.title)
+            .then(
+                console.log(`added ${answers.title} to the database`)
+            )
+            .then(()=>menu())
+    })
+}
+function addEmployee() {
+    inquirer.prompt([
+        {
+            type:'input',
+            name:'first_name',
+            message: 'Enter the name of the new Employee'
+        },
+        {
+            type:'input',
+            name:'last_name',
+            message: 'Enter their last name'
+        },
+        {
+            type:'input',
+            name:'title',
+            message: 'Enter their role'
+        },
+        {
+            type:'input',
+            name:'manager_id',
+            message: 'who is their manager?'
+        }
+        
+    ]),then(answers =>{
+        db.addRole(answers.first_name)
+            .then(
+                console.log(`added ${answers.first_name} to the database`)
+            )
+            .then(()=>menu())
+    })
+}
 
+// how can we set inquirer to accomodate for relationships?
+function updateEmployeeRole() {
+    inquirer.prompt([
+        {
+        //select employee
+        },
+        {
+        //select role
+        }
+
+    ]).then(answers=>{
+        //update database
+        console.log("update database with:", answers)
+    })
+    
 }
-function addEmployee(){
-    console.log('adding employee')
-}
-function updateEmployeeRole(){
-    console.log('this is a tricky one')
-}
-function renderTable(){
-    console.log('table')
+function done() {
+    console.log('Done!')
 }
 
 menu();
