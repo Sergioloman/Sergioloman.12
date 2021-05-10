@@ -95,13 +95,12 @@ function addDepartment() {
     inquirer.prompt([
         {
             type: 'input',
-            name: 'name',
-            //remember to match this value with what is under schema
+            name: 'name', //remember to match this value with what is under schema
             message: 'Enter the name of the new Department'
         }
-    ]).then(anwers => {
-        db.addDept(anwers.name)
-            .then(
+    ]).then(answers => {
+        db.addDept(answers.name)
+            .then(//res => {console.log(res)}
                 console.log(`added ${answers.name} to the database`)
             )
             
@@ -124,10 +123,10 @@ function addRole() {
             name:'department_id',
             message: 'What department does this role fit into?'
         }
-    ]),then(answers =>{
-        db.addRole(answers.title)
-            .then(
-                console.log(`added ${answers.title} to the database`)
+    ]).then(answers =>{
+        db.addRole([answers.title, answers.salary, answers.department_id])
+            .then(//
+                console.log(`added ${[answers.title, answers.salary, answers.department_id]} to the database`)
             )
             
     }).then(() => menu())
