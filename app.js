@@ -68,7 +68,7 @@ function viewDepartments() {
     db.getAllDepts().then(
         ([rows]) => {
             let departments = rows;
-            console.log("\n");//creates a new line
+            console.log("\n");
             console.table(departments);
         }
     ).then(() => menu())
@@ -84,7 +84,7 @@ function viewRoles() {
 }
 function viewEmployees() {
     db.getAllEmployees().then(
-        ([rows])=>{
+        ([rows, fields])=>{
             let employees = rows;
             console.log("\n");
             console.table(employees);
@@ -100,10 +100,7 @@ function addDepartment() {
         }
     ]).then(answers => {
         db.addDept(answers.name)
-            .then(//res => {console.log(res)}
-                console.log(`added ${answers.name} to the database`)
-            )
-            
+            .then(console.log(`added ${answers.name} to the database`))
     }).then(() => menu())
 }
 function addRole() {
@@ -122,13 +119,11 @@ function addRole() {
             type:'input',
             name:'department_id',
             message: 'What department does this role fit into?'
+            //choices => return array with all existing roles in db
         }
     ]).then(answers =>{
         db.addRole([answers.title, answers.salary, answers.department_id])
-            .then(//
-                console.log(`added ${[answers.title, answers.salary, answers.department_id]} to the database`)
-            )
-            
+            .then(console.log(`added ${[answers.title, answers.salary, answers.department_id]} to the database`))
     }).then(() => menu())
 }
 function addEmployee() {
@@ -147,40 +142,57 @@ function addEmployee() {
             type:'input',
             name:'title',
             message: 'Enter their role'
+            //add choices =>return prompt with existing roles
         },
         {
             type:'input',
             name:'manager_id',
             message: 'who is their manager?'
+            //add choices => return propmt with existing 
         }
         
     ]),then(answers =>{
-        db.addRole(answers.first_name)
-            .then(
-                console.log(`added ${answers.first_name} to the database`)
-            )
-            
+        db.addRole([answers.first_name, answers.last_name, answers.title, answers.manager_id])
+            .then(console.log(`added ${[answers.first_name, answers.last_name, answers.title, answers.manager_id]} to the database`))      
     }).then(() => menu())
 }
 
-// how can we set inquirer to accomodate for relationships?
+// must set up relationships in inquirer.
 function updateEmployeeRole() {
+    arrayEmployees = []
+    arrayRoles = []
     inquirer.prompt([
         {
         //select employee
+         type: 'list',
+         name: 'first_name',
+         message: 'select which employee you wish to update',
+         choices: arrayRoles
         },
         {
         //select role
+        type: 'list',
+        name: 'title',
+        message: 'which new role wich they take?',
+        choices: arrayEmployees
         }
-
     ]).then(answers=>{
         //update database
-        console.log("update database with:", answers)
+        db.updateRole([answers.first_name,answers.title])
+        .then(console.log(`updated database with:${[answers.first_name,answers.title]}`))
     }).then(() => menu())
-    
 }
 function done() {
-    console.log('Done!')
+    console.log('We are done!')
 }
 
 menu();
+
+
+/*be sure to run the following commands when
+getting started:
+ mysql -u root -p
+SOURCE db/schema.sql;
+SOURCE sb/seeds.sql;
+USE employees_db;
+*/
